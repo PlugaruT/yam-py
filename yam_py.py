@@ -68,18 +68,17 @@ def main(lang: str, pages: int, source: str) -> None:
     session = HTMLSession()
 
     raw_articles = []
-    for page in range(0, pages):
-        raw_articles.extend(fetch_page(session, page, lang))
+    with click.progressbar(range(0, pages)) as p:
+        for page in p:
+            raw_articles.extend(fetch_page(session, page, lang))
 
     articles = [Article(elem) for elem in raw_articles]
 
     if source:
         articles = list(filter(lambda a: a.source.lower() == source.lower(), articles))
 
-    articles=[]
     if not articles:
         click.secho("No articles found!", fg="yellow")
-
 
     for article in articles[::-1]:
         click.echo(click.style(f"{article.time} ", fg="green"), nl=False)
