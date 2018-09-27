@@ -19,6 +19,7 @@ class Article:
         self.time = self._extract_time()
         self.title = self._extract_title()
         self.link = self._extract_link(html_node.absolute_links)
+        self.source = self._extract_source()
 
     def __str__(self):
         return f"{self.time} {self.title}"
@@ -31,6 +32,9 @@ class Article:
 
     def _extract_title(self) -> str:
         return self._parts[1]
+
+    def _extract_source(self) -> str:
+        return self.title.split("#")[1].strip()
 
     def _extract_link(self, links: list) -> str:
         return next(x for x in links if self._is_matching(x))
@@ -58,7 +62,8 @@ def fetch_page(session: HTMLSession, page: int, lang: str) -> elements:
     type=click.INT,
     help="Number of pages to fetch. Each page represents 30 more articles.",
 )
-def main(lang: str, pages: int):
+@click.option("--source", default="", type=click.STRING, help="Source of the article.")
+def main(lang: str, pages: int, source: str) -> None:
     init()
     session = HTMLSession()
 
@@ -67,6 +72,15 @@ def main(lang: str, pages: int):
         raw_articles.extend(fetch_page(session, page, lang))
 
     articles = [Article(elem) for elem in raw_articles]
+
+    if source:
+        articles = list(filter(lambda a: a.source.lower() == source.lower(), articles))
+
+    articles=[]
+    if not articles:
+        click.secho("No articles found!", fg="yellow")
+
+
     for article in articles[::-1]:
         click.echo(click.style(f"{article.time} ", fg="green"), nl=False)
         click.echo(click.style(f"<{article.title}> ", fg="bright_blue"), nl=False)
@@ -74,4 +88,4 @@ def main(lang: str, pages: int):
 
 
 if __name__ == "__main__":
-    main() # pylint: disable=E1120
+    main()  # pylint: disable=E1120
