@@ -13,7 +13,7 @@ class Article:
         self._parts = html_node.text.split("\n")
         self.time = self._extract_time()
         self.title = self._extract_title()
-        self.link = list(html_node.absolute_links)[0]
+        self.link = self._extract_link(html_node.absolute_links)
 
     def __str__(self):
         return f"{self.time} {self.title}"
@@ -26,6 +26,13 @@ class Article:
 
     def _extract_title(self) -> str:
         return self._parts[1]
+
+    def _extract_link(self, links: list) -> str:
+        return next(x for x in links if self._is_matching(x))
+
+    def _is_matching(self, link: str) -> str:
+        # TODO [Tudor] Find a better way of finding the right link
+        return "/s/" in link
 
 
 def fetch_page(session: HTMLSession, page: int, lang: str) -> elements:
