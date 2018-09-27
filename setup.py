@@ -59,5 +59,5 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
-    entry_points={"console_scripts": ["yampy=yam_py:cli"]},
+    entry_points={"console_scripts": ["yam-py=yam_py:main"]},
 )
