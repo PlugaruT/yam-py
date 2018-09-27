@@ -45,7 +45,7 @@ setup(
     url=URL,
     python_requires=">=3.6.0",
     # If your package is a single module, use this instead of 'packages':
-    py_modules=["yam-py"],
+    py_modules=["yam_py"],
     install_requires=REQUIRED,
     include_package_data=True,
     license="MIT",
