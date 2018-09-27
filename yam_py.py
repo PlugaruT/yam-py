@@ -8,11 +8,6 @@ from requests_html import Element, HTMLSession
 elements = List[Element]
 
 
-@click.group()
-def cli():
-    """CLI interface for https://news.yam.md/"""
-
-
 class Article:
     def __init__(self, html_node: Element) -> None:
         self._parts = html_node.text.split("\n")
@@ -49,7 +44,6 @@ def fetch_page(session: HTMLSession, page: int, lang: str) -> elements:
     return response.html.find("div.news-list-row.story-row-container")
 
 
-@cli.command()
 @click.option(
     "--lang",
     default="ro",
@@ -62,8 +56,15 @@ def fetch_page(session: HTMLSession, page: int, lang: str) -> elements:
     type=click.INT,
     help="Number of pages to fetch. Each page represents 30 more articles.",
 )
-@click.option("--source", default="", type=click.STRING, help="Source of the article.")
-def main(lang: str, pages: int, source: str) -> None:
+@click.option(
+    "--source",
+    default="",
+    type=click.STRING,
+    help="Source of the article used for article filtering.",
+)
+@click.command()
+def cli(lang: str, pages: int, source: str) -> None:
+    """CLI interface for https://news.yam.md/"""
     init()
     session = HTMLSession()
 
@@ -87,4 +88,4 @@ def main(lang: str, pages: int, source: str) -> None:
 
 
 if __name__ == "__main__":
-    main()  # pylint: disable=E1120
+    cli()  # pylint: disable=E1120

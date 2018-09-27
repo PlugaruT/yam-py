@@ -20,10 +20,13 @@ Simple CLI interface for https://news.yam.md/
 $ yam-py --help
 Usage: yam-py [OPTIONS]
 
+  CLI interface for https://news.yam.md/
+
 Options:
-  --lang [ro|ru|en]  Language to be used when fetching list of articles.
+  --source TEXT      Source of the article used for article filtering.
   --pages INTEGER    Number of pages to fetch. Each page represents 30 more
                      articles.
+  --lang [ro|ru|en]  Language to be used when fetching list of articles.
   --help             Show this message and exit.
 ```
 
