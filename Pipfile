@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 requests-html = "*"
+click = "*"
 
 [dev-packages]
 black = "*"
